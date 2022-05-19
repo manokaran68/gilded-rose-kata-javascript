@@ -6,6 +6,7 @@
 
 <script type="text/javascript" src="lib/jquery-1.7.1/jquery-1.7.1.js"></script>
 <script type="text/javascript" src="src/gilded_rose.js"></script>
+<script type="text/javascript" src="src/gilded_rose_v2.js"></script>
 
 <script type="text/javascript">
   $( document ).ready(function() {
@@ -21,29 +22,42 @@
     items.push(new Item('Backstage passes to a TAFKAL80ETC concert', 10, 49));
     items.push(new Item('Backstage passes to a TAFKAL80ETC concert', 5, 49));
     // this conjured item does not work properly yet
+    // but works in v2
     items.push(new Item('Conjured Mana Cake', 3, 6));
 
-    var days = 2;
+    //Make a copy of items
+    itemsCopy = items.map(item => ({...item}));
+
+    var days = 16;
 
     for (var i = 0; i < days; i++) {
       showHeaderFor(i);
-      showItemsFor(i);
-      update_quality();
+      update_quality(); //this updates items
+      update_quality_v2(); //this updates itemsCopy
+      showItemsTableFor(i);
     }
 
     function showHeaderFor(day) {
       $('body').append('<p>-------- day ' + day + ' --------</p>');
     }
 
-    function showItemsFor(day) {
-      $('body').append('<p>name, sellIn, quality</p>');
+    function showItemsTableFor(day) {
+      var $table = $('<table/>');
+      $table.css({width: '80%'});
+      $table.append('<tr><th>Name</th><th>Sell In</th><th>Sell In V2</th><th>Quality</th><th>Quality V2</th><th></th></tr>');
       for (var j = 0; j < items.length; j++) {
         var item = items[j];
-        $('body').append('<p>' + item.name + ', ' + item.sell_in + ', ' + item.quality + '</p>');
+        var itemCopy = itemsCopy[j];
+        $tr = $(`<tr><td>${item.name}</td></tr>`);
+        ['sell_in', 'quality'].forEach(key => {
+          $tr.append(`<td>${item[key]}</td><td>${itemCopy[key]}</td>`);
+        });
+        $tr.append(`<td>${(item.sell_in === itemCopy.sell_in && item.quality === itemCopy.quality) ? '-' : 'diff'}</td>`);
+        $table.append($tr);
       }
+      $('body').append($table);
       $('body').append('<br />');
     }
-
   });
 </script>
 
