@@ -1,68 +1,83 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<head>
+  <head>
+    <title>Gilded Rose Texttest Fixture</title>
 
-<title>Gilded Rose Texttest Fixture</title>
+    <script
+      type="text/javascript"
+      src="lib/jquery-1.7.1/jquery-1.7.1.js"
+    ></script>
+    <script type="text/javascript" src="src/gilded_rose.js"></script>
+    <script type="text/javascript" src="src/gilded_rose_v2.js"></script>
 
-<script type="text/javascript" src="lib/jquery-1.7.1/jquery-1.7.1.js"></script>
-<script type="text/javascript" src="src/gilded_rose.js"></script>
-<script type="text/javascript" src="src/gilded_rose_v2.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $("body").append("<p>OMGHAI!</p>");
 
-<script type="text/javascript">
-  $( document ).ready(function() {
+        items.push(new Item("+5 Dexterity Vest", 10, 20));
+        items.push(new Item("Aged Brie", 2, 0));
+        items.push(new Item("Elixir of the Mongoose", 5, 7));
+        items.push(new Item("Sulfuras, Hand of Ragnaros", 0, 80));
+        items.push(new Item("Sulfuras, Hand of Ragnaros", -1, 80));
+        items.push(
+          new Item("Backstage passes to a TAFKAL80ETC concert", 15, 20)
+        );
+        items.push(
+          new Item("Backstage passes to a TAFKAL80ETC concert", 10, 49)
+        );
+        items.push(
+          new Item("Backstage passes to a TAFKAL80ETC concert", 5, 49)
+        );
+        // this conjured item does not work properly yet
+        // but works in v2
+        items.push(new Item("Conjured Mana Cake", 3, 6));
+        items.push(new Item("Misconfigured demon", 3, 6));
 
-    $('body').append('<p>OMGHAI!</p>');
+        //Make a copy of items
+        itemsCopy = items.map((item) => ({ ...item }));
 
-    items.push(new Item('+5 Dexterity Vest', 10, 20));
-    items.push(new Item('Aged Brie', 2, 0));
-    items.push(new Item('Elixir of the Mongoose', 5, 7));
-    items.push(new Item('Sulfuras, Hand of Ragnaros', 0, 80));
-    items.push(new Item('Sulfuras, Hand of Ragnaros', -1, 80));
-    items.push(new Item('Backstage passes to a TAFKAL80ETC concert', 15, 20));
-    items.push(new Item('Backstage passes to a TAFKAL80ETC concert', 10, 49));
-    items.push(new Item('Backstage passes to a TAFKAL80ETC concert', 5, 49));
-    // this conjured item does not work properly yet
-    // but works in v2
-    items.push(new Item('Conjured Mana Cake', 3, 6));
+        var days = 16;
 
-    //Make a copy of items
-    itemsCopy = items.map(item => ({...item}));
+        for (var i = 0; i < days; i++) {
+          showHeaderFor(i);
+          update_quality(); //this updates items
+          update_quality_v2(); //this updates itemsCopy
+          showItemsTableFor(i);
+        }
 
-    var days = 16;
+        function showHeaderFor(day) {
+          $("body").append("<p>-------- day " + day + " --------</p>");
+        }
 
-    for (var i = 0; i < days; i++) {
-      showHeaderFor(i);
-      update_quality(); //this updates items
-      update_quality_v2(); //this updates itemsCopy
-      showItemsTableFor(i);
-    }
+        function showItemsTableFor(day) {
+          var $table = $("<table/>");
+          $table.css({ width: "80%" });
+          $table.append(
+            "<tr><th>Name</th><th>Sell In</th><th>Sell In V2</th><th>Quality</th><th>Quality V2</th><th></th></tr>"
+          );
+          for (var j = 0; j < items.length; j++) {
+            var item = items[j];
+            var itemCopy = itemsCopy[j];
+            $tr = $(`<tr><td>${item.name}</td></tr>`);
+            ["sell_in", "quality"].forEach((key) => {
+              $tr.append(`<td>${item[key]}</td><td>${itemCopy[key]}</td>`);
+            });
+            $tr.append(
+              `<td>${
+                item.sell_in === itemCopy.sell_in &&
+                item.quality === itemCopy.quality
+                  ? "-"
+                  : "diff"
+              }</td>`
+            );
+            $table.append($tr);
+          }
+          $("body").append($table);
+          $("body").append("<br />");
+        }
+      });
+    </script>
+  </head>
 
-    function showHeaderFor(day) {
-      $('body').append('<p>-------- day ' + day + ' --------</p>');
-    }
-
-    function showItemsTableFor(day) {
-      var $table = $('<table/>');
-      $table.css({width: '80%'});
-      $table.append('<tr><th>Name</th><th>Sell In</th><th>Sell In V2</th><th>Quality</th><th>Quality V2</th><th></th></tr>');
-      for (var j = 0; j < items.length; j++) {
-        var item = items[j];
-        var itemCopy = itemsCopy[j];
-        $tr = $(`<tr><td>${item.name}</td></tr>`);
-        ['sell_in', 'quality'].forEach(key => {
-          $tr.append(`<td>${item[key]}</td><td>${itemCopy[key]}</td>`);
-        });
-        $tr.append(`<td>${(item.sell_in === itemCopy.sell_in && item.quality === itemCopy.quality) ? '-' : 'diff'}</td>`);
-        $table.append($tr);
-      }
-      $('body').append($table);
-      $('body').append('<br />');
-    }
-  });
-</script>
-
-</head>
-
-<body>
-</body>
+  <body></body>
 </html>
