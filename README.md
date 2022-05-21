@@ -1,4 +1,4 @@
-Hi and welcome to GrowthPhysics. We are a development agency who helps our
+We are a development agency who helps our
 clients improve both their systems as well as the quality of their code. First,
 its worthwhile to mention the things we value:
 
